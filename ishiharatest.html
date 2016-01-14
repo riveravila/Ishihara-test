@@ -2,8 +2,6 @@
 <html>
     <head>
     <title>Ishihara color test - Copyright 2008-2015 Yu-Jie Lin</title>  
-
-    <body onresize="resize_canvas()">
         <script>
             function normal_rand(mean, variance) {
                 var V1, V2, S;
@@ -62,9 +60,9 @@
                 ctx.textBaseline = 'middle';
                 ctx.fillStyle = '#000000';
                 ctx.fillText((Math.floor(Math.random() * 100)).toString(), 180, 200);
-                var ICT_DOTS = 500;
-                var ICT_DOT_SIZE_mean = 0.04;
-                var ICT_DOT_SIZE_var = 0.0001;
+                var ICT_DOTS = 400;
+                var ICT_DOT_SIZE_mean = 0.045;
+                var ICT_DOT_SIZE_var = 0.00012;
                 var dots = [];
                 var mag = Math.log(Math.random() * Math.PI) / Math.log(Math.PI);
                 mag = (mag > 0) ? mag : 1 / (1 - mag);
@@ -130,6 +128,7 @@
                 canvas.heigth = window.innerHeight;
                 var ctx = canvas.getContext('2d');
                 var radius = 220;
+                var radius2 = 500;
                 for (var i = 0; i < dots.length; i++) {
                     var dot = dots[i];
                     var color = dot[4];
@@ -139,25 +138,13 @@
                     ctx.fillStyle = 'rgb(' + color[0] + ',' + color[1] + ',' + color[2] + ')';
                     ctx.beginPath();
                     ctx.arc(20 + radius + dot[0] * radius, 20 + radius - dot[1] * radius, dot[2] * radius, 0, 2 * Math.PI, false);
- 
-            ctx.closePath();
+                    ctx.arc(400 + radius2 + dot[0] * radius2, 400 + radius2 - dot[1] * radius2, dot[2] * radius2, 0, 2 * Math.PI, false);
+                    ctx.closePath();
                     ctx.fill();
                 }
             }
-            function resize_canvas(){
-            canvas = document.getElementById("myCanvas");
-            if (canvas.width  < window.innerWidth)
-            {
-                canvas.width  = window.innerWidth;
-            }
-            if (canvas.height < window.innerHeight)
-            {
-                canvas.height = window.innerHeight;
-            }
-        }
         </script>
-        <div style="text-align:center; border-radius: 5 px; border: 1px solid #000; padding: 5 px;"> </div>
-            <canvas id="myCanvas" width="600" height="600" style="border:1px solid"></canvas>
+           <canvas id="myCanvas" width="1000" height="1500"></canvas>
             <input type="button" value="Generate" onclick="ict_generate();"/>
     </body>
 </html>
