@@ -29,4 +29,4 @@ A way to identify a colourblind person is to go through na Ishihara test: it con
 2)	Simulation of color blindness by reducing the colors along a dichromatic confusion line, the line parallel to the axis of the missing photoreceptor, to a single color. 
 3)	Compensation for color blindness by shifting wavelengths away from the portion of the spectrum invisible to the dichromat, towards the visible portion.
 4)	Converting LMS coordinates back to RGB, using the inverted RGB->LMS matrix.
-This sequence forms the daltonization algorithm.
+This sequence forms the daltonization process.
