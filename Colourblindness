@@ -1,12 +1,11 @@
 Color blindness deficiency
 
-Normal vision accesses up to 150 different wavelengths.
-Classification of colour blindness:
+  Normal vision accesses up to 150 different wavelengths.
+  Classification of colour blindness:
 - protanope: red colour blind (can see around 17 different wavelenghts);
 - deuteranope: green colour blind (around 27);
 - tritanope: blue-cone defficient;
-Who suffers from one of these defficiencies is a dichromat. 
-Dichromatism's a form of color blindness in which only 2 of the three fundamental colors(red green blue) can be distinguished due to a lack of one of the cone pigments. 
+  Who suffers from one of these defficiencies is a dichromat. Dichromatism's a form of color blindness in which only 2 of the three fundamental colors(red green blue) can be distinguished due to a lack of one of the cone pigments. 
 Cone cells, or cones, are one of two types of photoreceptor cells in the retina of the eye. 
 They are responsible for color vision and function best in relatively bright light. 
 To be strictly accurate, the question „What are the primary colours?“ should be answered as the following: 
@@ -18,13 +17,18 @@ Three parameters, corresponding to the levels of stimulus of the 3 types of cone
 That means the eye contains long, medium, and short wavelength cones, called L-cones, M-cones, and S-cones. 
 They are named after their sensitivity at wavelengths. It perceives colour through 3 types of cone on the retina. Thus, any colour is possible to be defined, such as any mixture of visible wavelengths, using 3 coordinates. 
 Colours are defined by their `tristimulus' coordinates X, Y, Z (linear measures of light power). The coordinates of any sum of colours is the sum of the coordinates of the colours. The colour of a colour, without reference to its total power, is conventionally described by its `chromaticity' coordinates x, y. XYZ is not RGB. XYZ are extrapolations of RGB created mathematically to avoid negative numbers (In 1931 there weren’t any computers).
-Often one or two (never the three) of the R, G, B coordinates will have negative value. It would mean that the colour stays outside the `gamut' of reproduceable by the monitor. In other words, all visible chromaticities correspond to non-negative values of x,y and z. A solution for out-of-gamut colours is to include white - equal parts of R, G, and B - just enough to make all components positive, so bringing the colour to the border of the gamut. That is, add -min(R, G, B, 0) to each of R, G, and B. It is this adding of white that causes disco purple and crimson red to appear palid in the spectrum.
+Often one or two (never the three) of the R, G, B coordinates will have negative value. It would mean that the colour stays outside the `gamut' of reproduceable by the monitor. In other words, all visible chromaticities correspond to non-negative values of x,y and z. A solution for out-of-gamut colours is to include white - equal parts of R, G, and B - just enough to make all components positive, so bringing the colour to the border of the gamut. 
+That is, adding -min(R, G, B, 0) to each of R, G, and B. It's this adding of white that causes disco purple and crimson red to appear palid in the spectrum.
 For the problem of achieving a wished level of brightness, there is a soltuion too: A multiply overall fator to the R, G, and B values of the entire Picture makes it possible to control this level. In case any R, G, or B value exceeds the permitted maximum (typically 1, or 255), then a rescaling back to maximum is necessary.
 An important keyword is „confusion lines“: What are they? Technically said Confusion lines of the CIE 1931 color space. 
-First of all, CIE  stands for Commission Internationale de l'Éclairage. It defines convention for xyz colour spaces. Colour spaces are defined quantitative links between physical pure colors (for instance wavelengths) in the electromagnetic visible spectrum, and physiological perceived colors in human color vision. A CIE Chromaticity Diagram displays colour plotted over the x-y plane of chromaticities; the gamut forms a triangle with the monitor's primaries at its vértices.
+First of all, CIE  stands for Commission Internationale de l'Éclairage. It defines convention for xyz colour spaces. Colour spaces are defined quantitative links between physical pure colors (for instance wavelengths) in the electromagnetic visible spectrum, and physiological perceived colors in human color vision. 
+A CIE Chromaticity Diagram displays colour plotted over the x-y plane of chromaticities; the gamut forms a triangle with the monitor's primaries at its vértices.
 - When looking at confusion lines, the third dimension (Y: lightness) is not necessary. 
-If two undistinguishable colors for a colorblind are identified, locate them on a CIE diagram and sketch a line through them, this will be the confusion line. It connects all the colors which can’t be differenciated by a colorblind person. Other confusion lines are possible to trace. They are either parallel or meet in a single point (the so-called co-punctual points).
-A way to identify a colourblind person is to go through na Ishihara test: it consists of a circle (Ishihara test plate) containing a number in the foreground, in a diferente colour. The algorithm relating to this test begins with 
+If two undistinguishable colors for a colorblind are identified, locate them on a CIE diagram and sketch a line through them, this will be the confusion line. 
+It connects all the colors which can’t be differenciated by a colorblind person. Other confusion lines are possible to trace. They are either parallel or meet in a single point (the so-called co-punctual points).
+
+A way to identify a colourblind person is to go through an Ishihara test: a circle (Ishihara test plate) containing a number in the foreground, in a diferente colour. 
+The algorithm relating to this test begins with 
 1)	Converting the coordinates of a RGB colour space to a LMS (this color space is suitable for calculating color blindness as it's represented by SML cones of the human eye)
 2)	Simulation of color blindness by reducing the colors along a dichromatic confusion line, the line parallel to the axis of the missing photoreceptor, to a single color. 
 3)	Compensation for color blindness by shifting wavelengths away from the portion of the spectrum invisible to the dichromat, towards the visible portion.
