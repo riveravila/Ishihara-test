@@ -1,9 +1,105 @@
 <!DOCTYPE html>
 <html>
     <head>
-    <title>Ishihara color test - Copyright 2008-2015 Yu-Jie Lin</title>  
+        <title>Ishihara color test - Copyright 2008-2015 Yu-Jie Lin</title>  
         <script>
-            function normal_rand(mean, variance) {
+
+            function circle(radius) {
+                this.radius = radius;
+
+                this.ict_generate = function () {
+                    var canvas = document.getElementById('myCanvas');
+                    var ctx = canvas.getContext('2d');
+                    ctx.fillStyle = '#ffffff';
+                    ctx.fillRect(0, 0, 400, 400);
+                    ctx.font = 'italic bold 280px "Comic Sans MS"';
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    ctx.fillStyle = '#000000';
+                    ctx.fillText((Math.floor(Math.random() * 100)).toString(), 180, 200);
+                    var ICT_DOTS = 400;
+                    var ICT_DOT_SIZE_mean = 0.045;
+                    var ICT_DOT_SIZE_var = 0.00012;
+                    var dots = [];
+                    var mag = Math.log(Math.random() * Math.PI) / Math.log(Math.PI);
+                    mag = (mag > 0) ? mag : 1 / (1 - mag);
+                    var arg = Math.random() * 2 * Math.PI;
+                    radius = Math.abs(this.normal_rand(ICT_DOT_SIZE_mean, ICT_DOT_SIZE_var));
+                    x = mag * Math.cos(arg);
+                    y = mag * Math.sin(arg);
+                    var highlight = (ctx.getImageData(x * 200 + 200, 200 - y * 200, 1, 1).data[0] == 0);
+                    if (highlight)
+                        color = hsv_to_rgb(148 + Math.random() * 48, 0.67, 0.66);
+                    else
+                        color = hsv_to_rgb(22 + Math.random() * 36, 0.58, 0.91);
+                    dots.push([x, y, radius, highlight, color]);
+                    for (var i = 1; i < ICT_DOTS; i++) {
+                        var x, y, radius, j;
+                        do {
+                            var mag = Math.log(Math.random() * Math.PI) / Math.log(Math.PI);
+                            mag = (mag > 0) ? mag : 1 / (1 - mag);
+                            var arg = Math.random() * 2 * Math.PI;
+                            radius = Math.abs(this.normal_rand(ICT_DOT_SIZE_mean, ICT_DOT_SIZE_var));
+                            x = mag * Math.cos(arg);
+                            y = mag * Math.sin(arg);
+                            j = 0;
+                            for (; j < i; j++) {
+                                if (this.ict_distance_check([x, y, radius], dots[j]))
+                                    break;
+                            }
+                        } while (j != i);
+                        var highlight = (ctx.getImageData(x * 200 + 200, 200 - y * 200, 1, 1).data[0] == 0);
+                        if (highlight)
+                            color = hsv_to_rgb(148 + Math.random() * 48, 0.67, 0.66);
+                        else
+                            color = hsv_to_rgb(22 + Math.random() * 36, 0.58, 0.91);
+                        dots.push([x, y, radius, highlight, color]);
+                    }
+                    dots.sort(function (a, b) {
+                        return a[2] - b[2]
+                    });
+                    for (var i = 0; i < 2; i++) {
+                        for (var j = 0; j < dots.length; j++) {
+                            var small_d = 99999;
+                            for (var k = 0; k < dots.length; k++) {
+                                if (j == k)
+                                    continue;
+                                var d = this.ict_distance(dots[j], dots[k]) - (dots[j][2] + dots[k][2] + this.ICT_MIN_DISTANCE);
+                                if (d < small_d)
+                                    small_d = d;
+                            }
+                            if (small_d > 0)
+                                dots[j][2] += small_d;
+                        }
+                        dots.sort(function (a, b) {
+                            return a[2] - b[2]
+                        });
+                    }
+                    window.saved_dots = dots;
+                    this.ict_draw(dots);
+                }
+
+                this.ict_draw = function (dots, highlight) {
+                    var canvas = document.getElementById('myCanvas');
+                    canvas.width = window.innerWidth;
+                    canvas.heigth = window.innerHeight;
+                    var ctx = canvas.getContext('2d');
+                    for (var i = 0; i < dots.length; i++) {
+                        var dot = dots[i];
+                        var color = dot[4];
+                        ctx.globalAlpha = 1.0;
+                        if (!dot[3] && highlight)
+                            ctx.globalAlpha = 0.25;
+                        ctx.fillStyle = 'rgb(' + color[0] + ',' + color[1] + ',' + color[2] + ')';
+                        ctx.beginPath();
+                        ctx.arc(20 + this.radius + dot[0] * this.radius, 20 + this.radius - dot[1] * this.radius, dot[2] * this.radius, 0, 2 * Math.PI, false);
+                        ctx.closePath();
+                        ctx.fill();
+                    }
+                }
+            }
+
+            circle.prototype.normal_rand = function (mean, variance) {
                 var V1, V2, S;
                 do {
                     var U1 = Math.random();
@@ -17,15 +113,14 @@
                 return X;
             }
 
-            var ICT_MIN_DISTANCE = 2.0 / 400;
-
-            function ict_distance(d1, d2) {
+            circle.prototype.ict_distance = function (d1, d2) {
                 return Math.sqrt(Math.pow(d1[0] - d2[0], 2) + Math.pow(d1[1] - d2[1], 2));
             }
 
-            function ict_distance_check(d1, d2) {
+            circle.prototype.ict_distance_check = function (d1, d2) {
                 var distance = Math.sqrt(Math.pow(d1[0] - d2[0], 2) + Math.pow(d1[1] - d2[1], 2));
-                return distance <= d1[2] + d2[2] + ICT_MIN_DISTANCE;
+                this.ICT_MIN_DISTANCE = 2.0 / 400;
+                return distance <= d1[2] + d2[2] + this.ICT_MIN_DISTANCE;
             }
 
             function hsv_to_rgb(H, S, V) {
@@ -50,101 +145,9 @@
                 return [Math.floor((RGB1[0] + m) * 256), Math.floor((RGB1[1] + m) * 256), Math.floor((RGB1[2] + m) * 256)];
             }
 
-            function ict_generate() {
-                var canvas = document.getElementById('myCanvas');
-                var ctx = canvas.getContext('2d');
-                ctx.fillStyle = '#ffffff';
-                ctx.fillRect(0, 0, 400, 400);
-                ctx.font = 'italic bold 280px "Comic Sans MS"';
-                ctx.textAlign = 'center';
-                ctx.textBaseline = 'middle';
-                ctx.fillStyle = '#000000';
-                ctx.fillText((Math.floor(Math.random() * 100)).toString(), 180, 200);
-                var ICT_DOTS = 400;
-                var ICT_DOT_SIZE_mean = 0.045;
-                var ICT_DOT_SIZE_var = 0.00012;
-                var dots = [];
-                var mag = Math.log(Math.random() * Math.PI) / Math.log(Math.PI);
-                mag = (mag > 0) ? mag : 1 / (1 - mag);
-                var arg = Math.random() * 2 * Math.PI;
-                radius = Math.abs(normal_rand(ICT_DOT_SIZE_mean, ICT_DOT_SIZE_var));
-                x = mag * Math.cos(arg);
-                y = mag * Math.sin(arg);
-                var highlight = (ctx.getImageData(x * 200 + 200, 200 - y * 200, 1, 1).data[0] == 0);
-                if (highlight)
-                    color = hsv_to_rgb(148 + Math.random() * 48, 0.67, 0.66);
-                else
-                    color = hsv_to_rgb(22 + Math.random() * 36, 0.58, 0.91);
-                dots.push([x, y, radius, highlight, color]);
-                for (var i = 1; i < ICT_DOTS; i++) {
-                    var x, y, radius, j;
-                    do {
-                        var mag = Math.log(Math.random() * Math.PI) / Math.log(Math.PI);
-                        mag = (mag > 0) ? mag : 1 / (1 - mag);
-                        var arg = Math.random() * 2 * Math.PI;
-                        radius = Math.abs(normal_rand(ICT_DOT_SIZE_mean, ICT_DOT_SIZE_var));
-                        x = mag * Math.cos(arg);
-                        y = mag * Math.sin(arg);
-                        j = 0;
-                        for (; j < i; j++) {
-                            if (ict_distance_check([x, y, radius], dots[j]))
-                                break;
-                        }
-                    } while (j != i);
-                    var highlight = (ctx.getImageData(x * 200 + 200, 200 - y * 200, 1, 1).data[0] == 0);
-                    if (highlight)
-                        color = hsv_to_rgb(148 + Math.random() * 48, 0.67, 0.66);
-                    else
-                        color = hsv_to_rgb(22 + Math.random() * 36, 0.58, 0.91);
-                    dots.push([x, y, radius, highlight, color]);
-                }
-                dots.sort(function (a, b) {
-                    return a[2] - b[2]
-                });
-                for (var i = 0; i < 2; i++) {
-                    for (var j = 0; j < dots.length; j++) {
-                        var small_d = 99999;
-                        for (var k = 0; k < dots.length; k++) {
-                            if (j == k)
-                                continue;
-                            var d = ict_distance(dots[j], dots[k]) - (dots[j][2] + dots[k][2] + ICT_MIN_DISTANCE);
-                            if (d < small_d)
-                                small_d = d;
-                        }
-                        if (small_d > 0)
-                            dots[j][2] += small_d;
-                    }
-                    dots.sort(function (a, b) {
-                        return a[2] - b[2]
-                    });
-                }
-                window.saved_dots = dots;
-                ict_draw(dots);
-            }
-
-            function ict_draw(dots, highlight) {
-                var canvas = document.getElementById('myCanvas');
-                canvas.width =  window.innerWidth;
-                canvas.heigth = window.innerHeight;
-                var ctx = canvas.getContext('2d');
-                var radius = 220;
-                var radius2 = 500;
-                for (var i = 0; i < dots.length; i++) {
-                    var dot = dots[i];
-                    var color = dot[4];
-                    ctx.globalAlpha = 1.0;
-                    if (!dot[3] && highlight)
-                        ctx.globalAlpha = 0.25;
-                    ctx.fillStyle = 'rgb(' + color[0] + ',' + color[1] + ',' + color[2] + ')';
-                    ctx.beginPath();
-                    ctx.arc(400 + radius + dot[0] * radius, 10 + radius - dot[1] * radius, dot[2] * radius, 0, 2 * Math.PI, false);
-                    ctx.arc(400 + radius2 + dot[0] * radius2, 500 + radius2 - dot[1] * radius2, dot[2] * radius2, 0, 2 * Math.PI, false);
-                    ctx.closePath();
-                    ctx.fill();
-                }
-            }
+            var cir = new circle(220);
         </script>
-           <canvas id="myCanvas" width="1000" height="1600"></canvas>
-            <input type="button" value="Generate" onclick="ict_generate();"/>
-    </body>
+    <canvas id="myCanvas" width="1000" height="1500"></canvas>
+    <input type="button" value="Generate" onclick="cir.ict_generate();"/>
+</body>
 </html>
