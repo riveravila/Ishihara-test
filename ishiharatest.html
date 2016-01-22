@@ -137,14 +137,14 @@
                         ctx.globalAlpha = 0.25;
                     ctx.fillStyle = 'rgb(' + color[0] + ',' + color[1] + ',' + color[2] + ')';
                     ctx.beginPath();
-                    ctx.arc(20 + radius + dot[0] * radius, 20 + radius - dot[1] * radius, dot[2] * radius, 0, 2 * Math.PI, false);
-                    ctx.arc(400 + radius2 + dot[0] * radius2, 400 + radius2 - dot[1] * radius2, dot[2] * radius2, 0, 2 * Math.PI, false);
+                    ctx.arc(400 + radius + dot[0] * radius, 10 + radius - dot[1] * radius, dot[2] * radius, 0, 2 * Math.PI, false);
+                    ctx.arc(400 + radius2 + dot[0] * radius2, 500 + radius2 - dot[1] * radius2, dot[2] * radius2, 0, 2 * Math.PI, false);
                     ctx.closePath();
                     ctx.fill();
                 }
             }
         </script>
-           <canvas id="myCanvas" width="1000" height="1500"></canvas>
+           <canvas id="myCanvas" width="1000" height="1600"></canvas>
             <input type="button" value="Generate" onclick="ict_generate();"/>
     </body>
 </html>
