@@ -29,9 +29,9 @@
                     y = mag * Math.sin(arg);
                     var highlight = (ctx.getImageData(x * 200 + 200, 200 - y * 200, 1, 1).data[0] == 0);
                     if (highlight)
-                        color = hsv_to_rgb(148 + Math.random() * 48, 0.67, 0.66);
+                        color = this.hsv_to_rgb(148 + Math.random() * 48, 0.67, 0.66);
                     else
-                        color = hsv_to_rgb(22 + Math.random() * 36, 0.58, 0.91);
+                        color = this.hsv_to_rgb(22 + Math.random() * 36, 0.58, 0.91);
                     dots.push([x, y, radius, highlight, color]);
                     for (var i = 1; i < ICT_DOTS; i++) {
                         var x, y, radius, j;
@@ -50,9 +50,9 @@
                         } while (j != i);
                         var highlight = (ctx.getImageData(x * 200 + 200, 200 - y * 200, 1, 1).data[0] == 0);
                         if (highlight)
-                            color = hsv_to_rgb(148 + Math.random() * 48, 0.67, 0.66);
+                            color = this.hsv_to_rgb(148 + Math.random() * 48, 0.67, 0.66);
                         else
-                            color = hsv_to_rgb(22 + Math.random() * 36, 0.58, 0.91);
+                            color = this.hsv_to_rgb(22 + Math.random() * 36, 0.58, 0.91);
                         dots.push([x, y, radius, highlight, color]);
                     }
                     dots.sort(function (a, b) {
@@ -75,14 +75,13 @@
                             return a[2] - b[2]
                         });
                     }
-                    window.saved_dots = dots;
                     this.ict_draw(dots);
                 }
 
                 this.ict_draw = function (dots, highlight) {
                     var canvas = document.getElementById('myCanvas');
-                    canvas.width = window.innerWidth;
-                    canvas.heigth = window.innerHeight;
+                    canvas.width = canvas.width;
+                    canvas.heigth = canvas.heigth;
                     var ctx = canvas.getContext('2d');
                     for (var i = 0; i < dots.length; i++) {
                         var dot = dots[i];
@@ -123,7 +122,7 @@
                 return distance <= d1[2] + d2[2] + this.ICT_MIN_DISTANCE;
             }
 
-            function hsv_to_rgb(H, S, V) {
+            circle.prototype.hsv_to_rgb = function (H, S, V) {
                 var C = V * S;
                 var H1 = H / 60;
                 var X = C * (1 - Math.abs(H1 % 2 - 1));
@@ -146,6 +145,7 @@
             }
 
             var cir = new circle(220);
+            
         </script>
     <canvas id="myCanvas" width="1000" height="1500"></canvas>
     <input type="button" value="Generate" onclick="cir.ict_generate();"/>
