@@ -1,4 +1,4 @@
-function QuestionnaireItemIshihara(className, content, required, size) {    //TODO ColorCode 
+function QuestionnaireItemIshihara(className, content, required, size) {    
 //    QuestionnaireItem.call(this, className, content, required);
     this.size = size;
     this.content = content;
@@ -10,17 +10,12 @@ QuestionnaireItemIshihara.prototype.createUI = function () {
     this.canvas = document.createElement('canvas');
     this.canvas.width = this.size;
     this.canvas.height = this.size;
-
     ict_generate(this.canvas, this.content);
     return this.canvas;
 };
 QuestionnaireItemIshihara.prototype.releaseUI = function () {
     this.canvas = null;
 };
-
-QuestionnaireItemIshihara.prototype.returnSize = function () {
-    return this.size;
-}
 
 function normal_rand(mean, variance) {
     var V1, V2, S;
