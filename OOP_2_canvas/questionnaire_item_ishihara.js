@@ -65,18 +65,6 @@ function ict_generate(canvas, content) {
     ctx.fillStyle = '#ffffff';  //sets white to fill the drawing.
     ctx.fillRect(0, 0, canvas.width, canvas.width); //draws a "filled" rectangle
     ctx.font = 'italic bold 280px"Comic Sans MS"'; //font and font size of content to be written
-    /*
-     * fontsize rescalable according to canvas
-     *
-    var fontBase = 400;
-    var fontSize = 280;
-    function getFont() {
-        var ratio = fontSize / fontBase;
-        var size = canvas.width * ratio;   // get font size based on current width
-        return (size | 0) + 'px sans-serif'; // set font
-    }
-    */
-    //ctx.font = getFont();
     ctx.textAlign = 'center'; //Centers content
     ctx.textBaseline = 'middle'; //
     ctx.fillStyle = '#000000'; //render the text in colour black
