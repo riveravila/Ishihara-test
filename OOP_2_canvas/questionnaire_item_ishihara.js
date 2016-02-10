@@ -1,4 +1,4 @@
-function QuestionnaireItemIshihara(className, content, required, size) {    
+function QuestionnaireItemIshihara(className, content, required, size) {
 //    QuestionnaireItem.call(this, className, content, required);
     this.size = size;
     this.content = content;
@@ -31,6 +31,7 @@ function normal_rand(mean, variance) {
     return X;
 }
 var ICT_MIN_DISTANCE = 2.0 / 400;
+
 function ict_distance(d1, d2) {
     return Math.sqrt(Math.pow(d1[0] - d2[0], 2) + Math.pow(d1[1] - d2[1], 2));
 }
@@ -80,12 +81,11 @@ function ict_generate(canvas, content) {
     x = mag * Math.cos(arg);
     y = mag * Math.sin(arg);
     var highlight = (ctx.getImageData(x * 200 + 200, 200 - y * 200, 1, 1).data[0] == 0);
-    console.log("highlight is" + highlight);
+    var imgData = ctx.getImageData(x * 200 + 200, 200 - y * 200, 1, 1);
     if (highlight)
         color = hsv_to_rgb(148 + Math.random() * 48, 0.67, 0.66);
     else
         color = hsv_to_rgb(22 + Math.random() * 36, 0.58, 0.91);
-    console.log("color is" + color);
     dots.push([x, y, radius, highlight, color]);
     for (var i = 1; i < ICT_DOTS; i++) {
         var x, y, radius, j;
@@ -103,12 +103,10 @@ function ict_generate(canvas, content) {
             }
         } while (j != i);
         var highlight = (ctx.getImageData(x * 200 + 200, 200 - y * 200, 1, 1).data[0] == 0);
-        //returns an ImageData object
         if (highlight)
             color = hsv_to_rgb(148 + Math.random() * 48, 0.67, 0.66);
         else
             color = hsv_to_rgb(22 + Math.random() * 36, 0.58, 0.91);
-
         dots.push([x, y, radius, highlight, color]);
     }
     dots.sort(function (a, b) {
@@ -131,15 +129,12 @@ function ict_generate(canvas, content) {
             return a[2] - b[2]
         });
     }
-    ict_draw(canvas, dots);
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ict_draw(canvas, dots, true);
 }
 function ict_draw(canvas, dots, highlight) {
     var ctx = canvas.getContext('2d');
-    canvas.width =  canvas.width;
-    canvas.heigth = canvas.heigth;
-    console.log("canvas.width"+canvas.width);
     var radius = canvas.width / 2.2;
-    console.log("radius is " + radius);
     for (var i = 0; i < dots.length; i++) {
         var dot = dots[i];
         var color = dot[4];
